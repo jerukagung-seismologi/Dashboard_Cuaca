@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   keywords: [
     "Jerukagung",
     "Meteorologi",
+    "Meteorologist",
+    "Atmosfer",
     "Sains Atmosfer",
     "Cuaca",
     "Iklim",
