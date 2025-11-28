@@ -62,11 +62,12 @@ export default function Header({
   }
 
   const sensors = [
-    { id: "id-01", name: "Sensor 1" },
-    { id: "id-02", name: "Sensor 2" },
-    { id: "id-03", name: "Sensor 3" },
-    { id: "id-04", name: "Sensor 4" },
-    { id: "id-05", name: "Sensor 5" }
+    { id: "id-01", name: "AWS Tester" },
+    { id: "id-02", name: "StaMet Lumbu" },
+    { id: "id-03", name: "Staklim Jerukagung" },
+    { id: "id-04", name: "StaMet Prigi" },
+    { id: "id-05", name: "Stasiun Hujan Jerukagung" }, 
+    { id: "id-06", name: "Stasiun Hujan Riset" }
   ]
 
   const timeIntervals = [
