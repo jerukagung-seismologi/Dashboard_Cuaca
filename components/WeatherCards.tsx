@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Thermometer, Droplets, Gauge, Sprout, Battery, CloudRain, Wind, Umbrella, Sun, ArrowUp, ArrowDown } from "lucide-react"
+import { Thermometer, Droplets, Gauge, Sprout, Battery, CloudRain, Wind, Umbrella, Sun, ArrowUp, ArrowDown, Import } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import WindCompass from "@/components/WindCompass"
+import RainMeasuringCup from "@/components/RainMeasuringCup"
 import type { WeatherData } from "@/lib/FetchingSensorData"
 import { cn } from "@/lib/utils"
 import { Progress } from "@/components/ui/progress"
+
 
 interface WeatherCardsProps {
   data: WeatherData
@@ -38,8 +39,10 @@ export default function WeatherCards({ data, isMobile }: WeatherCardsProps) {
 
   // Calculate percentages for progress bars
   const sunlightPercentage = Math.min(Math.round((sunlightIntensity / 120000) * 100), 100)
-  const hourlyRainfallPercentage = Math.min(Math.round((currentRainRate / 25) * 100), 100) // Max 25 mm/hr
-  const dailyRainfallPercentage = Math.min(Math.round((currentRainfall / 150) * 100), 100) // Max 150 mm/day
+  
+  // NOTE: Logic progress bar lama dihapus karena digantikan komponen gelas ukur
+  // const hourlyRainfallPercentage = Math.min(Math.round((currentRainRate / 25) * 100), 100) 
+  // const dailyRainfallPercentage = Math.min(Math.round((currentRainfall / 150) * 100), 100) 
 
   // Determine sunlight intensity category
   const getSunlightCategory = (intensity: number) => {
@@ -180,6 +183,7 @@ export default function WeatherCards({ data, isMobile }: WeatherCardsProps) {
 
       {/* Enhanced weather cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
         {/* Wind Card */}
         <Card className="border-2 border-sky-200 dark:border-sky-800 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
           <CardHeader className="pb-2">
@@ -224,7 +228,7 @@ export default function WeatherCards({ data, isMobile }: WeatherCardsProps) {
           </CardContent>
         </Card>
 
-        {/* Current Rain Rate Card */}
+        {/* 1. CURRENT RAIN RATE CARD (Updated with Cup) */}
         <Card className="border-2 border-cyan-200 dark:border-cyan-800 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center justify-between">
@@ -235,39 +239,28 @@ export default function WeatherCards({ data, isMobile }: WeatherCardsProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col space-y-4">
-              <div className="flex items-end justify-between">
-                <div>
-                  <span className="text-3xl font-bold">{currentRainRate.toFixed(2)}</span>
-                  <span className="text-lg ml-1">mm</span>
-                </div>
-                <span className="text-sm font-medium px-2 py-1 rounded-full bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300">
-                  {getHourlyRainfallCategory(currentRainRate)}
-                </span>
+            <div className="flex flex-col items-center text-center">
+              {/* Value Display */}
+              <div className="flex items-end justify-center gap-2 mb-2">
+                <span className="text-4xl font-bold">{currentRainRate.toFixed(2)}</span>
+                <span className="text-lg text-muted-foreground pb-1">mm/h</span>
               </div>
+              
+              <span className="text-sm font-medium px-3 py-1 rounded-full bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300 mb-2">
+                {getHourlyRainfallCategory(currentRainRate)}
+              </span>
 
-              <div className="space-y-2">
-                <Progress value={hourlyRainfallPercentage} className="h-2 bg-gray-200 dark:bg-gray-700">
-                  <div
-                    className="h-full bg-gradient-to-r from-cyan-200 via-cyan-400 to-cyan-500 rounded-full"
-                    style={{ width: `${hourlyRainfallPercentage}%` }}
-                  />
-                </Progress>
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Ringan</span>
-                  <span>Sedang</span>
-                  <span>Lebat</span>
-                </div>
-              </div>
+              {/* Component Gelas Ukur (Max 25 mm/h) */}
+              <RainMeasuringCup value={currentRainRate} maxValue={25} />
 
-              <p className="text-xs text-muted-foreground">
-                Laju curah hujan saat ini diukur dalam milimeter per jam. Ini menunjukkan seberapa deras hujan saat ini.
+              <p className="text-xs text-muted-foreground mt-2">
+                Intensitas curah hujan saat ini.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Daily Rainfall Total Card */}
+        {/* 2. DAILY RAINFALL CARD (Updated with Cup) */}
         <Card className="border-2 border-indigo-200 dark:border-indigo-800 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center justify-between">
@@ -278,37 +271,24 @@ export default function WeatherCards({ data, isMobile }: WeatherCardsProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-4xl font-bold">{currentRainfall.toFixed(2)}</span>
-                  <span className="text-lg ml-1">mm</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-sm font-medium px-2 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300">
-                    {getDailyRainfallCategory(currentRainfall)}
-                  </span>
-                </div>
+            <div className="flex flex-col items-center text-center">
+              {/* Value Display */}
+              <div className="flex items-end justify-center gap-2 mb-2">
+                <span className="text-4xl font-bold">{currentRainfall.toFixed(2)}</span>
+                <span className="text-lg text-muted-foreground pb-1">mm</span>
               </div>
 
-              <div className="space-y-2">
-                <Progress value={dailyRainfallPercentage} className="h-2 bg-gray-200 dark:bg-gray-700">
-                  <div
-                    className="h-full bg-gradient-to-r from-indigo-200 via-indigo-400 to-indigo-500 rounded-full"
-                    style={{ width: `${dailyRainfallPercentage}%` }}
-                  />
-                </Progress>
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Ringan</span>
-                  <span>Sedang</span>
-                  <span>Lebat</span>
-                </div>
-              </div>
+              <span className="text-sm font-medium px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 mb-2">
+                {getDailyRainfallCategory(currentRainfall)}
+              </span>
 
-              <p className="text-xs text-muted-foreground">
+              {/* Component Gelas Ukur (Max 150 mm/hari) */}
+              <RainMeasuringCup value={currentRainfall} maxValue={150} />
+
+              <p className="text-xs text-muted-foreground mt-2">
                 {currentRainfall === 0
-                  ? "Tidak ada curah hujan yang tercatat hari ini."
-                  : "Total akumulasi curah hujan untuk hari ini."}
+                  ? "Tidak ada hujan tercatat hari ini."
+                  : "Total akumulasi sejak jam 00:00."}
               </p>
             </div>
           </CardContent>
@@ -335,7 +315,6 @@ export default function WeatherCards({ data, isMobile }: WeatherCardsProps) {
                   {getSunlightCategory(sunlightIntensity)}
                 </span>
               </div>
-
               <div className="space-y-2">
                 <Progress value={sunlightPercentage} className="h-2 bg-gray-200 dark:bg-gray-700">
                   <div
