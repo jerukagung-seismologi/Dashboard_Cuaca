@@ -65,7 +65,7 @@ export default function Header({
     { id: "id-01", name: "AWS Tester" },
     { id: "id-02", name: "StaMet Lumbu" },
     { id: "id-03", name: "Staklim Jerukagung" },
-    { id: "id-04", name: "StaMet Prigi" },
+    { id: "id-04", name: "StaMet Evapotranspirasi" },
     { id: "id-05", name: "Stasiun Hujan Jerukagung" }, 
     { id: "id-06", name: "Stasiun Hujan Riset" }
   ]

@@ -15,7 +15,7 @@ export type MoonPhaseType =
 
 interface MoonPhaseIconProps {
   phase: MoonPhaseType
-  size?: "sm" | "md" | "lg" | "xl"
+  size?: "sm" | "md" | "lg" | "xl" | "2xl"
   className?: string
   showLabel?: boolean
 }
@@ -39,128 +39,182 @@ export default function MoonPhaseIcon({
 }: MoonPhaseIconProps) {
   
   const sizeClasses = {
-    sm: "w-6 h-6",
-    md: "w-12 h-12",
-    lg: "w-20 h-20",
+    sm: "w-8 h-8",
+    md: "w-16 h-16",
+    lg: "w-24 h-24",
     xl: "w-32 h-32",
+    "2xl": "w-48 h-48",
   }
 
-  // --- LOGIKA BENTUK & ROTASI ---
-  const { pathD, rotation, illumination } = useMemo(() => {
-    
-    // Radius kelengkungan perut (0-50).
-    // 35 memberikan bentuk buncit/sabit yang pas seperti referensi.
+  // --- LOGIKA MASKING & CAHAYA ---
+  const { pathD, rotation, shadowOpacity } = useMemo(() => {
+    // Radius kelengkungan
     const rx = 35 
     
     let d = ""
-    let rot = "rotate-0" // Default tegak lurus
-    let illum = 0
+    let rot = 0 // Derajat rotasi mask
+    let opacity = 0 // Opacity untuk glow
 
-    // M 50,0 = Titik Atas
-    // A 50,50 0 0 1 50,100 = Gambar Setengah Lingkaran KANAN
-    // A 50,50 0 0 0 50,100 = Gambar Setengah Lingkaran KIRI
-
+    // Kita menggambar 'Mask' (Bagian yang TERANG)
+    // M 50,0 ... adalah koordinat path relatif terhadap viewBox 0 0 100 100
     switch (phase) {
       case "new-moon":
-        d = "" 
-        illum = 0
+        d = "M 0,0" // Tidak ada cahaya
+        rot = 0
+        opacity = 0
         break
 
       case "waxing-crescent": 
-        // SABIT MUDA (Mirip pisang)
-        // Rotasi -45deg agar miring ke kanan bawah (seperti standar visual)
-        rot = "-rotate-45"
-        // 1. Luar Kanan
-        // 2. Dalam Cekung (Sweep 0) -> Hasil: SABIT
+        // Cahaya di Kanan Bawah
+        rot = -45
         d = `M 50,0 A 50,50 0 0 1 50,100 A ${rx},50 0 0,0 50,0`
-        illum = 0.25
+        opacity = 0.3
         break
 
       case "first-quarter":
-        rot = "rotate-0"
+        // Cahaya Setengah Kanan
+        rot = 0
         d = `M 50,0 A 50,50 0 0 1 50,100 L 50,0`
-        illum = 0.5
+        opacity = 0.5
         break
 
       case "waxing-gibbous":
-        // CEMBUNG MUDA (Sesuai Gambar Referensi Anda)
-        // Rotasi -45deg agar cahaya ada di Kanan-Atas
-        rot = "-rotate-45" 
-        // 1. Luar Kanan
-        // 2. Dalam Cembung Keluar (Sweep 1) -> Hasil: BUNCIT/TELUR
+        // Cahaya Hampir Penuh (Kanan Atas Dominan)
+        rot = -45
         d = `M 50,0 A 50,50 0 0 1 50,100 A ${rx},50 0 0,1 50,0`
-        illum = 0.75
+        opacity = 0.8
         break
 
       case "full-moon":
+        rot = 0
         d = `M 50,0 A 50,50 0 1 1 50,100 A 50,50 0 1 1 50,0`
-        illum = 1
+        opacity = 1
         break
 
       case "waning-gibbous":
-        // CEMBUNG AKHIR
-        rot = "rotate-45"
-        // 1. Luar Kiri
-        // 2. Dalam Cembung Keluar (Sweep 0) -> Hasil: BUNCIT
+        // Cahaya Hampir Penuh (Kiri Dominan)
+        rot = 45
         d = `M 50,0 A 50,50 0 0 0 50,100 A ${rx},50 0 0,0 50,0`
-        illum = 0.75
+        opacity = 0.8
         break
 
       case "last-quarter":
-        rot = "rotate-0"
+        // Cahaya Setengah Kiri
+        rot = 0
         d = `M 50,0 A 50,50 0 0 0 50,100 L 50,0`
-        illum = 0.5
+        opacity = 0.5
         break
 
       case "waning-crescent":
-        // SABIT TUA
-        rot = "rotate-45"
-        // 1. Luar Kiri
-        // 2. Dalam Cekung (Sweep 1) -> Hasil: SABIT
+        // Cahaya Sabit Kiri
+        rot = 45
         d = `M 50,0 A 50,50 0 0 0 50,100 A ${rx},50 0 0,1 50,0`
-        illum = 0.25
+        opacity = 0.3
         break
     }
 
-    return { pathD: d, rotation: rot, illumination: illum }
+    return { pathD: d, rotation: rot, shadowOpacity: opacity }
   }, [phase])
+
+  // ID unik untuk mask agar tidak bentrok jika ada banyak icon di satu halaman
+  const uniqueId = `moon-mask-${phase}-${size}`
 
   return (
     <div 
-      className={cn("relative rounded-full aspect-square flex items-center justify-center", sizeClasses[size], className)}
+      className={cn("relative flex items-center justify-center", sizeClasses[size], className)}
       title={showLabel ? PHASE_NAMES[phase] : undefined}
     >
-      {/* Container utama yang akan diputar sesuai fase */}
-      <div className={cn("relative w-full h-full transition-transform duration-500", rotation)}>
+      <div className="relative w-full h-full">
         
-        {/* 1. BACKGROUND (GELAP / BAYANGAN) */}
-        {/* Warna abu-abu gelap seperti di gambar referensi Anda */}
-        <div className="absolute inset-0 rounded-full bg-slate-800 dark:bg-slate-700 border border-slate-600 shadow-inner overflow-hidden"></div>
-
-        {/* 2. FOREGROUND (CAHAYA MATAHARI) */}
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+        {/* SVG Container */}
+        <svg 
+          viewBox="0 0 100 100" 
+          className="w-full h-full drop-shadow-2xl"
+          style={{ overflow: 'visible' }}
+        >
           <defs>
-            {/* Gradient Putih ke Abu-abu agar terlihat bulat 3D */}
-            <radialGradient id="moonLight" cx="50%" cy="50%" r="80%" fx="50%" fy="50%">
-              <stop offset="0%" stopColor="#ffffff" /> 
-              <stop offset="100%" stopColor="#d1d5db" /> 
+            {/* 1. Definisi Filter & Gradient untuk Realisme */}
+            
+            {/* Gradient Permukaan Bulan (Abu-abu ke Putih) */}
+            <radialGradient id="surfaceGrad" cx="40%" cy="40%" r="90%">
+              <stop offset="0%" stopColor="#e2e8f0" /> {/* slate-200 */}
+              <stop offset="80%" stopColor="#94a3b8" /> {/* slate-400 */}
+              <stop offset="100%" stopColor="#475569" /> {/* slate-600 (tepi gelap) */}
             </radialGradient>
+
+            {/* Gradient Bagian Gelap (Earthshine) - Efek cahaya pantulan bumi */}
+            <radialGradient id="earthshineGrad" cx="50%" cy="50%" r="80%">
+              <stop offset="0%" stopColor="#1e293b" /> {/* slate-800 */}
+              <stop offset="100%" stopColor="#0f172a" /> {/* slate-900 */}
+            </radialGradient>
+
+            {/* Pola Kawah (Craters) */}
+            <pattern id="craters" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              {/* Kawah-kawah acak */}
+              <circle cx="30" cy="30" r="10" fill="#cbd5e1" opacity="0.5" />
+              <circle cx="70" cy="60" r="8" fill="#cbd5e1" opacity="0.4" />
+              <circle cx="55" cy="20" r="4" fill="#cbd5e1" opacity="0.3" />
+              <circle cx="20" cy="70" r="6" fill="#cbd5e1" opacity="0.4" />
+              <circle cx="80" cy="30" r="5" fill="#cbd5e1" opacity="0.3" />
+              <circle cx="45" cy="80" r="12" fill="#cbd5e1" opacity="0.2" />
+            </pattern>
+
+            {/* Masking: Bentuk fase cahaya */}
+            <mask id={uniqueId}>
+              {/* Hitam = Sembunyi, Putih = Tampil */}
+              <rect x="0" y="0" width="100" height="100" fill="black" />
+              <path 
+                d={pathD} 
+                fill="white" 
+                transform={`rotate(${rotation} 50 50)`} 
+                className="transition-all duration-700 ease-in-out"
+              />
+            </mask>
           </defs>
 
-          {/* Gambar Bagian Terang */}
-          <path 
-              d={pathD} 
-              fill="url(#moonLight)" 
-              className="transition-all duration-700 ease-in-out"
-              filter="drop-shadow(0 0 1px rgba(255,255,255,0.5))"
+          {/* LAYER 1: Sisi Gelap (Earthshine) */}
+          <circle cx="50" cy="50" r="49" fill="url(#earthshineGrad)" stroke="#1e293b" strokeWidth="1" />
+          
+          {/* LAYER 2: Sisi Terang (Dengan Masking Fase) */}
+          <g mask={`url(#${uniqueId})`}>
+            {/* Dasar Terang */}
+            <circle cx="50" cy="50" r="49.5" fill="url(#surfaceGrad)" />
+            {/* Tekstur Kawah (Hanya muncul di bagian terang) */}
+            <circle cx="50" cy="50" r="49.5" fill="url(#craters)" style={{ mixBlendMode: 'multiply' }} />
+          </g>
+
+          {/* LAYER 3: Inner Shadow untuk kesan bola 3D (selalu di atas) */}
+          <circle 
+            cx="50" 
+            cy="50" 
+            r="49.5" 
+            fill="none" 
+            stroke="black" 
+            strokeOpacity="0.1" 
+            strokeWidth="1"
+            className="pointer-events-none"
           />
+          <path
+             d="M 50,0 A 50,50 0 1 1 50,100 A 50,50 0 1 1 50,0"
+             fill="url(#earthshineGrad)"
+             opacity="0.1"
+             className="pointer-events-none"
+             style={{ mixBlendMode: 'overlay' }}
+          />
+
         </svg>
+
+        {/* LAYER 4: Outer Glow (Cahaya atmosfer) */}
+        {shadowOpacity > 0 && (
+          <div 
+            className="absolute inset-0 rounded-full bg-blue-100 dark:bg-blue-400 blur-xl transition-opacity duration-700"
+            style={{ 
+              opacity: shadowOpacity * 0.4, // Maksimal 40% opacity
+              zIndex: -1 
+            }}
+          ></div>
+        )}
       </div>
-      
-      {/* 3. GLOW EFFECT (Di luar container rotasi agar glow tetap rata) */}
-      {illumination > 0.8 && (
-        <div className="absolute -inset-4 rounded-full bg-blue-100/10 blur-xl -z-10 animate-pulse pointer-events-none"></div>
-      )}
     </div>
   )
 }
