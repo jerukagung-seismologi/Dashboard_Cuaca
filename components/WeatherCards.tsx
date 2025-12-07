@@ -265,7 +265,7 @@ export default function WeatherCards({ data, isMobile }: WeatherCardsProps) {
               </div>
               <Badge variant="outline" className="mb-2 border-indigo-200 text-indigo-700 dark:border-indigo-800 dark:text-indigo-300">{getDailyRainfallCategory(currentRainfall)}</Badge>
               <RainMeasuringCup value={currentRainfall} maxValue={150} />
-              <p className="text-xs text-muted-foreground mt-2">{currentRainfall === 0 ? "Tidak ada hujan tercatat hari ini." : "Total akumulasi sejak jam 00:00."}</p>
+              <p className="text-xs text-muted-foreground mt-2">{currentRainfall === 0 ? "Tidak ada hujan tercatat hari ini." : "Total akumulasi sejak jam 07:00 WIB."}</p>
             </div>
           </CardContent>
         </Card>
