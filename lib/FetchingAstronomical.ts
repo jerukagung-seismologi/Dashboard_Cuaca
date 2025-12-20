@@ -7,15 +7,17 @@ export interface AstronomicalApi {
   astronomical_twilight_end: string;
 }
 
+interface MoonApi {
+  moon_phase: string;
+  moon_illumination: string;
+}
+
 interface SunriseSunsetApiResponse {
   results: AstronomicalApi;
   status: "OK" | "INVALID_REQUEST" | "INVALID_DATE" | "UNKNOWN_ERROR";
 }
 
-interface MoonApi {
-  moon_phase: string;
-  moon_illumination: string;
-}
+
 
 interface WeatherApiResponse {
   astronomy: {
@@ -37,7 +39,8 @@ export interface AstronomicalDataType {
 
 export async function fetchSunriseSunsetData(lat: number, lng: number): Promise<AstronomicalApi> {
   const response = await fetch(
-    `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&date=today&tzid=Asia/Jakarta&formatted=0`
+    `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&date=today&tzid=Asia/Jakarta&formatted=0`,
+    { next: { revalidate: 21600 } } // Cache for 6 hours
   );
   const json = (await response.json()) as SunriseSunsetApiResponse;
 
@@ -50,9 +53,11 @@ export async function fetchSunriseSunsetData(lat: number, lng: number): Promise<
 
 export async function fetchMoonData(lat: number, lng: number): Promise<MoonApi> {
   const response = await fetch(
-    `https://api.weatherapi.com/v1/astronomy.json?key=2855a16152da4b5e8a6212335220304&q=${lat},${lng}&dt=today`
+    `https://api.weatherapi.com/v1/astronomy.json?key=2855a16152da4b5e8a6212335220304&q=${lat},${lng}&dt=today`,
+    { next: { revalidate: 21600 } } // Cache for 6 hours
   );
   const json = (await response.json()) as WeatherApiResponse;
+
   return json.astronomy.astro;
 }
 
