@@ -5,7 +5,7 @@ import { Sunrise, Sunset, Moon, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { fetchAstronomicalData, AstronomicalDataType } from "@/lib/FetchingAstronomical";
-import MoonPhaseIcon from "./MoonPhaseIcon";
+import MoonPhaseIcon from "@/components/MoonPhaseIcon";
 
 interface AstronomicalDataProps {
   className?: string;
@@ -13,7 +13,7 @@ interface AstronomicalDataProps {
 
 // Custom hook
 function useAstronomicalData(lat: number, lng: number) {
-  const [data, setData] = useState<AstronomicalDataType | null>(null);
+  const [astroData, setData] = useState<AstronomicalDataType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -38,11 +38,11 @@ function useAstronomicalData(lat: number, lng: number) {
     };
   }, [lat, lng]);
 
-  return { data, loading, error };
+  return { astroData, loading, error };
 }
 
 export default function AstronomicalData({ className }: AstronomicalDataProps) {
-  const { data, loading, error } = useAstronomicalData(-7.736628913501616, 109.64609598596998);
+  const { astroData, loading, error } = useAstronomicalData(-7.736628913501616, 109.64609598596998);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // Update current time every minute
@@ -63,7 +63,7 @@ export default function AstronomicalData({ className }: AstronomicalDataProps) {
     );
   }
 
-  if (error || !data) {
+  if (error || !astroData) {
     return (
       <Card className={cn("border-2 border-primary/20 shadow-md", className)}>
         <CardContent className="p-6">
@@ -77,7 +77,7 @@ export default function AstronomicalData({ className }: AstronomicalDataProps) {
     <Card className={cn("border-2 border-primary/20 shadow-md", className)}>
       <CardHeader className="pb-2">
         <CardTitle className="text-xl flex items-center justify-between">
-          <span>Astronomical Data</span>
+          <span>Data Astronomi</span>
           <div className="flex items-center text-sm font-normal text-muted-foreground">
             <Clock className="h-4 w-4 mr-1" />
             <span>{currentTime.toLocaleTimeString([], { 
@@ -97,17 +97,17 @@ export default function AstronomicalData({ className }: AstronomicalDataProps) {
               <div className="p-2 rounded-full bg-amber-500/20">
                 <Sunrise className="h-6 w-6 text-amber-500" />
               </div>
-              <h3 className="text-base font-medium">Sunrise</h3>
+              <h3 className="text-base font-medium">Terbit Matahari</h3>
             </div>
-            <p className="text-3xl font-bold text-amber-700 dark:text-amber-400">{data.sunrise}</p>
+            <p className="text-3xl font-bold text-amber-700 dark:text-amber-400">{astroData.sunrise}</p>
             <div className="space-y-1 mt-2">
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Astronomical Twilight:</span>
-                <span>{data.astronomicalTwilightBegin}</span>
+                <span>{astroData.astronomicalTwilightBegin}</span>
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Solar Noon:</span>
-                <span>{data.solarNoon}</span>
+                <span>{astroData.solarNoon}</span>
               </div>
             </div>
           </div>
@@ -117,17 +117,17 @@ export default function AstronomicalData({ className }: AstronomicalDataProps) {
               <div className="p-2 rounded-full bg-orange-500/20">
                 <Sunset className="h-6 w-6 text-orange-500" />
               </div>
-              <h3 className="text-base font-medium">Sunset</h3>
+              <h3 className="text-base font-medium">Terbenam Matahari</h3>
             </div>
-            <p className="text-3xl font-bold text-orange-700 dark:text-orange-400">{data.sunset}</p>
+            <p className="text-3xl font-bold text-orange-700 dark:text-orange-400">{astroData.sunset}</p>
             <div className="space-y-1 mt-2">
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Astronomical Twilight:</span>
-                <span>{data.astronomicalTwilightEnd}</span>
+                <span>{astroData.astronomicalTwilightEnd}</span>
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Day Length:</span>
-                <span>{data.dayLength}</span>
+                <span>{astroData.dayLength}</span>
               </div>
             </div>
           </div>
@@ -140,13 +140,13 @@ export default function AstronomicalData({ className }: AstronomicalDataProps) {
               <h3 className="text-base font-medium">Moon Phase</h3>
             </div>
             <div className="flex justify-between items-center mb-2">
-              <p className="text-xl font-bold text-indigo-700 dark:text-indigo-400">{data.moonPhase}</p>
+              <p className="text-xl font-bold text-indigo-700 dark:text-indigo-400">{astroData.moonPhase}</p>
               <span className="text-sm text-muted-foreground">
-                {data.moonIllumination}% illuminated
+                {astroData.moonIllumination}% illuminated
               </span>
             </div>
             
-            <MoonPhaseIcon phase={data.moonPhaseIcon as any} size="lg" className="mx-auto mb-3" />
+            <MoonPhaseIcon phase={astroData.moonPhaseIcon as any} size="lg" className="mx-auto mb-3" />
             <div className="w-full flex justify-between text-xs text-muted-foreground">
               {["new-moon", 
                 "first-quarter", 

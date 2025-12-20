@@ -7,8 +7,8 @@ export default function LoadingState() {
       <Card className="w-full max-w-md border-2 border-primary/20 shadow-md">
         <CardContent className="flex flex-col items-center justify-center p-8">
           <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
-          <h3 className="text-xl font-semibold mb-2">Loading weather data...</h3>
-          <p className="text-muted-foreground text-center">Fetching the latest weather information from the station.</p>
+          <h3 className="text-xl font-semibold mb-2">Memuat Data...</h3>
+          <p className="text-muted-foreground text-center">Memuat data terakhir dari Sistem Meteo Sense</p>
         </CardContent>
       </Card>
     </div>

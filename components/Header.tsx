@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { useTheme } from "next-themes"
 
-interface WeatherHeaderProps {
+interface WeatherHeader {
   sensorId: string
   onSensorChange: (sensorId: string) => void
   dataPoints: number
@@ -22,7 +22,7 @@ export default function Header({
   dataPoints,
   onDataPointsChange,
   isLoading,
-}: WeatherHeaderProps) {
+}: WeatherHeader) {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [currentTime, setCurrentTime] = useState<string>("")
   const [currentDate, setCurrentDate] = useState<string>("")

@@ -12,6 +12,7 @@ import WeatherInterpretation from "@/components/WeatherInterpreter"
 import WeatherCharts from "@/components/WeatherCharts"
 import ErrorState from "@/components/ErrorState"
 import { Toaster } from "@/components/ui/toaster"
+import Footer from "@/components/Footer"
 
 export default function WeatherDashboard() {
   const [sensorId, setSensorId] = useState("id-03")
@@ -56,8 +57,11 @@ export default function WeatherDashboard() {
 
   return (
     <ThemeProvider defaultTheme="system" storageKey="weather-theme-preference">
-      <div className="min-h-screen bg-gradient-to-b from-background to-background/80 dark:from-background dark:to-background/90 transition-colors duration-300">
-        <div className="container mx-auto px-4 py-6">
+      {/* Menggunakan flex-col dan min-h-screen agar footer selalu di bawah */}
+      <div className="flex min-h-screen flex-col bg-gradient-to-b from-background to-background/80 dark:from-background dark:to-background/90 transition-colors duration-300">
+        
+        {/* Konten Utama dengan flex-1 untuk mendorong footer */}
+        <div className="container mx-auto px-4 py-6 flex-1">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <WeatherHeader
               sensorId={sensorId}
@@ -81,6 +85,9 @@ export default function WeatherDashboard() {
             </>
           )}
         </div>
+        
+        {/* Footer diletakkan di luar container utama agar full-width dan selalu muncul */}
+        <Footer />
         <Toaster />
       </div>
     </ThemeProvider>
