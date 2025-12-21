@@ -4,6 +4,8 @@ export interface AstronomicalApi {
   solar_noon: string;
   day_length: number;
   astronomical_twilight_begin: string;
+  civil_twilight_begin: string;
+  civil_twilight_end: string;
   astronomical_twilight_end: string;
 }
 
@@ -31,6 +33,8 @@ export interface AstronomicalDataType {
   solarNoon: string;
   dayLength: string;
   astronomicalTwilightBegin: string;
+  civilTwilightBegin: string;
+  civilTwilightEnd: string;
   astronomicalTwilightEnd: string;
   moonPhase: string;
   moonPhaseIcon: string;
@@ -85,6 +89,8 @@ export async function fetchAstronomicalData(lat: number, lng: number): Promise<A
     solarNoon: formatTimeFromISO(sunData.solar_noon),
     dayLength: formatDayLength(sunData.day_length),
     astronomicalTwilightBegin: formatTimeFromISO(sunData.astronomical_twilight_begin),
+    civilTwilightBegin: formatTimeFromISO(sunData.civil_twilight_begin),
+    civilTwilightEnd: formatTimeFromISO(sunData.civil_twilight_end),
     astronomicalTwilightEnd: formatTimeFromISO(sunData.astronomical_twilight_end),
     moonPhase: moonData.moon_phase,
     moonPhaseIcon: moonData.moon_phase.toLowerCase().replace(" ", "-"),

@@ -90,47 +90,65 @@ export default function AstronomicalData({ className }: AstronomicalDataProps) {
       </CardHeader>
 
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Sunrise */}
-          <div className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/20 rounded-lg p-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
+        {/* grid from 3 to 2 columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Combined: Sunrise + Sunset */}
+          <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-orange-100 dark:from-amber-950/30 dark:via-orange-950/30 dark:to-orange-900/20 rounded-lg p-4 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
               <div className="p-2 rounded-full bg-amber-500/20">
-                <Sunrise className="h-6 w-6 text-amber-500" />
+                <Sunrise className="h-6 w-6 text-amber-600" />
               </div>
-              <h3 className="text-base font-medium">Terbit Matahari</h3>
-            </div>
-            <p className="text-3xl font-bold text-amber-700 dark:text-amber-400">{astroData.sunrise}</p>
-            <div className="space-y-1 mt-2">
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Astronomical Twilight:</span>
-                <span>{astroData.astronomicalTwilightBegin}</span>
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Solar Noon:</span>
-                <span>{astroData.solarNoon}</span>
-              </div>
-            </div>
-          </div>
-          {/* Sunset */}
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/20 rounded-lg p-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
               <div className="p-2 rounded-full bg-orange-500/20">
-                <Sunset className="h-6 w-6 text-orange-500" />
+                <Sunset className="h-6 w-6 text-orange-600" />
               </div>
-              <h3 className="text-base font-medium">Terbenam Matahari</h3>
+              <h3 className="text-base font-medium">Terbit & Terbenam Matahari</h3>
             </div>
-            <p className="text-3xl font-bold text-orange-700 dark:text-orange-400">{astroData.sunset}</p>
-            <div className="space-y-1 mt-2">
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Astronomical Twilight:</span>
-                <span>{astroData.astronomicalTwilightEnd}</span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Sunrise section */}
+              <div className="rounded-md p-3 bg-white/50 dark:bg-black/10">
+                <p className="text-xs uppercase tracking-wide text-amber-700 dark:text-amber-400 mb-1">Terbit</p>
+                <p className="text-3xl font-bold text-amber-700 dark:text-amber-400">{astroData.sunrise}</p>
+                <div className="space-y-1 mt-2">
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Astronomical Twilight:</span>
+                    <span>{astroData.astronomicalTwilightBegin}</span>
+                  </div>
+                  {/* Added: Civil Twilight Begin */}
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Civil Twilight Begin:</span>
+                    <span>{astroData.civilTwilightBegin}</span>
+                  </div>
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Solar Noon:</span>
+                    <span>{astroData.solarNoon}</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Day Length:</span>
-                <span>{astroData.dayLength}</span>
+
+              {/* Sunset section */}
+              <div className="rounded-md p-3 bg-white/50 dark:bg-black/10">
+                <p className="text-xs uppercase tracking-wide text-orange-700 dark:text-orange-400 mb-1">Terbenam</p>
+                <p className="text-3xl font-bold text-orange-700 dark:text-orange-400">{astroData.sunset}</p>
+                <div className="space-y-1 mt-2">
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Astronomical Twilight:</span>
+                    <span>{astroData.astronomicalTwilightEnd}</span>
+                  </div>
+                  {/* Added: Civil Twilight End */}
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Civil Twilight End:</span>
+                    <span>{astroData.civilTwilightEnd}</span>
+                  </div>
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Day Length:</span>
+                    <span>{astroData.dayLength}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
           {/* Moon Phase */}
           <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-950/30 dark:to-indigo-900/20 rounded-lg p-4 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
