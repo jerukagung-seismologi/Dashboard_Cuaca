@@ -3,60 +3,53 @@
  */
 
 /**
- * Calculate Humidex (Canadian humidity index)
- * Humidex is an index used to express how hot the weather feels to the average person
- * by combining the effect of heat and humidity
+ * Calculate THI (Temperature-Humidity Index - Thom's Discomfort Index)
+ * THI expresses how hot the weather feels to the average person by combining
+ * the effect of heat and humidity, using Thom's formula.
+ *
+ * Formula (Celsius): THI = T - (0.55 - 0.0055 * RH) * (T - 14.5)
  *
  * @param temperature Temperature in Celsius
  * @param humidity Relative humidity (%)
- * @returns Humidex value
+ * @returns THI value
  */
-export function calculateHumidex(temperature: number, humidity: number): number {
-  // Calculate dewpoint first
-  const a = 17.27
-  const b = 237.7
-  const alpha = (a * temperature) / (b + temperature) + Math.log(humidity / 100)
-  const dewPoint = (b * alpha) / (a - alpha)
-
-  // Calculate humidex using the dewpoint
-  const e = 6.11 * Math.exp(5417.753 * (1 / 273.16 - 1 / (dewPoint + 273.16)))
-  const humidex = temperature + 0.5555 * (e - 10)
-
-  return Math.round(humidex * 10) / 10 // Round to 1 decimal place
+export function calculateTHI(temperature: number, humidity: number): number {
+  const thi = temperature - (0.55 - 0.0055 * humidity) * (temperature - 14.5)
+  return Math.round(thi * 10) / 10 // Round to 1 decimal place
 }
 
 /**
- * Get Humidex comfort level description
+ * Get THI comfort level description
  *
- * @param humidex Humidex value
+ * @param thi THI value
  * @returns Object with comfort level description and color
  */
-export function getHumidexComfort(humidex: number): { level: string; description: string; color: string } {
-  if (humidex < 29) {
+export function getTHIComfort(thi: number): { level: string; description: string; color: string } {
+  if (thi < 21) {
     return {
       level: "Comfortable",
       description: "Little to no discomfort",
       color: "text-green-500",
     }
-  } else if (humidex >= 29 && humidex < 35) {
+  } else if (thi >= 21 && thi < 24) {
     return {
       level: "Noticeable Discomfort",
       description: "Some discomfort, especially during physical activity",
       color: "text-yellow-500",
     }
-  } else if (humidex >= 35 && humidex < 40) {
+  } else if (thi >= 24 && thi < 27) {
     return {
       level: "Evident Discomfort",
       description: "Evident discomfort; limit intense physical activity",
       color: "text-orange-500",
     }
-  } else if (humidex >= 40 && humidex < 45) {
+  } else if (thi >= 27 && thi < 29) {
     return {
       level: "Intense Discomfort",
       description: "Intense discomfort; avoid exertion",
       color: "text-red-500",
     }
-  } else if (humidex >= 45 && humidex < 54) {
+  } else if (thi >= 29 && thi < 32) {
     return {
       level: "Dangerous",
       description: "Dangerous levels of discomfort; avoid outdoor activities",

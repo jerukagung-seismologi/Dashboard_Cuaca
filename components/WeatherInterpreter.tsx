@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { WeatherData } from "@/lib/FetchingSensorData"
 import { interpretWeather, getActivityRecommendations, type WeatherCondition } from "@/lib/WeatherInterpreter"
-import { calculateHumidex, getHumidexComfort } from "@/lib/ComfortIndex"
+import { calculateTHI, getTHIComfort } from "@/lib/ComfortIndex"
 import { cn } from "@/lib/utils"
 import {
   Sun,
@@ -19,6 +19,11 @@ import {
   Thermometer,
   type LucideIcon,
 } from "lucide-react"
+
+// Tailwind safelist agar kelas warna dari ComfortIndex tidak terpurge
+// Jangan hapus meski tidak dipakai langsung.
+const COMFORT_COLOR_SAFELIST =
+  "text-green-500 text-yellow-500 text-orange-500 text-red-500 text-red-600 text-purple-600"
 
 interface WeatherInterpretationProps {
   data: WeatherData
@@ -48,10 +53,10 @@ export default function WeatherInterpretation({ data }: WeatherInterpretationPro
       const activityRecommendations = getActivityRecommendations(temperature, humidity, pressure)
       setRecommendations(activityRecommendations)
 
-      // Calculate Humidex (comfort index)
-      const humidex = calculateHumidex(temperature, humidity)
-      setHumidexValue(humidex)
-      setHumidexComfort(getHumidexComfort(humidex))
+      // Calculate THI (comfort index)
+      const thi = calculateTHI(temperature, humidity)
+      setHumidexValue(thi)
+      setHumidexComfort(getTHIComfort(thi))
     }
   }, [data])
 
@@ -103,11 +108,11 @@ export default function WeatherInterpretation({ data }: WeatherInterpretationPro
             <p className="text-muted-foreground">{interpretation.description}</p>
           </div>
 
-          {/* Humidex Comfort Index */}
+          {/* THI Comfort Index */}
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <Thermometer className={cn("h-4 w-4", humidexComfort.color)} />
-              <h3 className="text-sm font-semibold">Humidex Comfort Index</h3>
+              <h3 className="text-sm font-semibold">Thermal Comfort Index</h3>
             </div>
             <div className="flex items-center gap-2 mb-2">
               <Badge variant="outline" className={cn("text-sm font-medium", humidexComfort.color)}>
@@ -116,7 +121,7 @@ export default function WeatherInterpretation({ data }: WeatherInterpretationPro
             </div>
             <p className="text-xs text-muted-foreground">{humidexComfort.description}</p>
             <p className="text-xs text-muted-foreground mt-1">
-              Humidex measures how hot it feels by combining temperature and humidity effects on the human body.
+              THI measures how hot it feels by combining temperature and humidity effects on the human body.
             </p>
           </div>
 
