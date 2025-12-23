@@ -13,7 +13,7 @@ import WeatherCharts from "@/components/WeatherCharts"
 import ErrorState from "@/components/ErrorState"
 import { Toaster } from "@/components/ui/toaster"
 import Footer from "@/components/Footer"
-import BMKGNowcasting from "@/components/BMKGNowcasting"
+import BMKGNowcasting from "@/components/BMKGPrediction"
 
 export default function WeatherDashboard() {
   const [sensorId, setSensorId] = useState("id-03")

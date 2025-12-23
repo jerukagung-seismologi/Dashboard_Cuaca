@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useMemo } from "react"
-import { fetchBMKGData, BMKGOutputData } from "@/lib/FetchingBMKGData"
+import { fetchBMKGData, BMKGOutputData } from "@/lib/FetchingBMKGPrediction"
 
 type Props = {
   className?: string
