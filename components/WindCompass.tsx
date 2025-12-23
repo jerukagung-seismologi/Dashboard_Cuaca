@@ -147,7 +147,6 @@ export default function WindCompass({
                 </span>
             </div>
         </div>
-
       </div>
     </div>
   )
