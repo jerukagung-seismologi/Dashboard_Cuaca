@@ -41,7 +41,7 @@ export default function Footer() {
               <span className="text-lg font-semibold text-foreground">Jerukagung Seismologi</span>
             </div>
             <p className="text-sm mb-4 max-w-xs">
-              Departemen Penelitian Sains Atmosfer. Menyediakan data cuaca akurat untuk wilayah Kebumen dan sekitarnya.
+              Departemen Penelitian Sains Atmosfer Penelitian dan Observasi Cuaca wilayah Kebumen dan sekitarnya.
             </p>
             <div className="flex space-x-3">
               <a href="#" className="bg-background hover:bg-accent p-2 rounded-full border transition-colors">

@@ -9,8 +9,8 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
-import WindCompass from "@/components/WindCompass"
-import RainMeasuringCup from "@/components/RainMeasuringCup"
+import WindCompass from "@/components/graphics/WindCompass"
+import RainMeasuringCup from "@/components/graphics/RainMeasuringCup"
 import type { WeatherData } from "@/lib/FetchingSensorData"
 
 // --- HELPER: RENDER TREND (ANGKA + IKON) ---

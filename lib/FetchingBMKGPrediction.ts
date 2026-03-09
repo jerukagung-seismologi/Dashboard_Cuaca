@@ -29,15 +29,19 @@ function deepFlatten(arr: any[]): any[] {
   }, []);
 }
 
-// Fetch and normalize BMKG response into flat BMKGOutputData[]
-export async function fetchBMKGData(): Promise<BMKGOutputData[]> {
+/**
+ * Fetch and normalize BMKG response into flat BMKGOutputData[]
+ * @param adm4 - Kode administrasi level 4 (desa/kelurahan)
+ */
+export async function fetchBMKGData(adm4: string = "33.05.05.2009"): Promise<BMKGOutputData[]> {
   try {
     const _fetch: any = (globalThis as any).fetch;
     if (typeof _fetch !== 'function') {
       throw new Error('Fetch API is not available in this runtime.');
     }
 
-    const response = await _fetch('https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=33.05.05.2009');
+    const apiUrl = `https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=${adm4}`;
+    const response = await _fetch(apiUrl);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

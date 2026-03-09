@@ -5,7 +5,7 @@ import { Sunrise, Sunset, Moon, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { fetchAstronomicalData, AstronomicalDataType } from "@/lib/FetchingAstronomical";
-import MoonPhaseIcon from "@/components/MoonPhaseIcon";
+import MoonPhaseIcon from "@/components/graphics/MoonPhaseIcon";
 
 interface AstronomicalDataProps {
   className?: string;
