@@ -115,29 +115,50 @@ export default function WeatherDashboard() {
 
   return (
     <Card className="border-2 border-gray-200 dark:border-gray-700 shadow-md">
-      <CardHeader className="flex-row items-center justify-between">
-        <div>
-          <CardTitle className="flex items-center gap-3 text-xl">
-            <CalendarClock className="h-6 w-6 text-gray-600 dark:text-gray-300" />
-            <span>Prakiraan Cuaca BMKG - {location?.name || "N/A"}</span>
-          </CardTitle>
-          {bmkgData[0]?.analysis_date && (
-            <p className="text-xs text-muted-foreground mt-1">
-              Analisis: {new Date(bmkgData[0].analysis_date).toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })} WIB
-            </p>
-          )}
+      <CardHeader>
+        {/* Layout: flex-col di mobile, flex-row di desktop */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          
+          {/* Kiri: Judul dan Tanggal Analisis */}
+          <div>
+            <CardTitle className="flex items-center gap-3 text-xl">
+              <CalendarClock className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+              <span>Prakiraan Cuaca BMKG - {location?.name || "N/A"}</span>
+            </CardTitle>
+            {bmkgData[0]?.analysis_date && (
+              <p className="text-xs text-muted-foreground mt-1 ml-9">
+                Analisis:{" "}
+                {new Date(bmkgData[0].analysis_date).toLocaleString("id-ID", {
+                  day: "2-digit",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}{" "}
+                WIB
+              </p>
+            )}
+          </div>
+
+          {/* Kanan (desktop) / Bawah judul (mobile): Selector Hari */}
+          <ToggleGroup
+            type="single"
+            value={selectedDay}
+            onValueChange={(value: SelectedDay) => value && setSelectedDay(value)}
+            className="self-start sm:self-auto"
+            aria-label="Pilih Hari Prakiraan"
+          >
+            <ToggleGroupItem value="today" className="text-xs sm:text-sm px-3">
+              Hari Ini
+            </ToggleGroupItem>
+            <ToggleGroupItem value="tomorrow" className="text-xs sm:text-sm px-3">
+              Besok
+            </ToggleGroupItem>
+            <ToggleGroupItem value="dayAfter" className="text-xs sm:text-sm px-3">
+              Lusa
+            </ToggleGroupItem>
+          </ToggleGroup>
+
         </div>
-        <ToggleGroup
-          type="single"
-          value={selectedDay}
-          onValueChange={(value: SelectedDay) => value && setSelectedDay(value)}
-          className="justify-end"
-          aria-label="Pilih Hari Prakiraan"
-        >
-          <ToggleGroupItem value="today">Hari Ini</ToggleGroupItem>
-          <ToggleGroupItem value="tomorrow">Besok</ToggleGroupItem>
-          <ToggleGroupItem value="dayAfter">Lusa</ToggleGroupItem>
-        </ToggleGroup>
       </CardHeader>
       <CardContent>
         {filteredForecasts.length > 0 ? (
