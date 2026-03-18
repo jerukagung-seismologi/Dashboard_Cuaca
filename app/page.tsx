@@ -4,7 +4,7 @@ import Image from "next/image"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
-import WeatherDashboard from "@/components/WeatherDashboard"
+import WeatherDashboard from "@/components/graphics/WeatherDashboard"
 import { Toaster } from "@/components/ui/toaster"
 import AstronomicalData from "@/components/AstronomicalData"
 
