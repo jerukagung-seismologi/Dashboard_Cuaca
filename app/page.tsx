@@ -17,7 +17,7 @@ export default function HomePage() {
         {/* Wallpaper Background menggunakan Next/Image */}
         <div className="fixed inset-0 -z-10">
           <Image
-            src="/weather-background.jpg"
+            src="/background.jpg"
             alt="Weather background"
             fill
             priority
