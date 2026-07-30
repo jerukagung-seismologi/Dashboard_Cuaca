@@ -1,10 +1,17 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "@/styles/global.css"
 import { ThemeProvider } from "@/components/ThemeProvider"
 
 const inter = Inter({ subsets: ["latin"] })
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
+  ],
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://cuaca.jerukagunglabs.web.id"),
@@ -42,10 +49,6 @@ export const metadata: Metadata = {
   category: "Science",
   referrer: "origin-when-cross-origin",
   manifest: "/site.webmanifest",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
-  ],
   robots: {
     index: true,
     follow: true,

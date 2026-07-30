@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Home, ArrowLeft } from 'lucide-react'
+import { Home } from 'lucide-react'
 import BackButton from '@/components/BackButton'
 
 const inter = Inter({ subsets: ['latin'] })
