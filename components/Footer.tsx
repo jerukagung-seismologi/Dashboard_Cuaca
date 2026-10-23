@@ -114,7 +114,7 @@ export default function Footer() {
       {/* Warming Stripes - Full Width */}
       <a href="https://showyourstripes.info/" target="_blank" rel="noopener noreferrer" className="block w-full h-8 relative transition-all duration-500">
         <Image
-          src="https://showyourstripes.info/stripes/ASIA-Indonesia-Yogyakarta-1866-2024-BK.png"
+          src="/images/warming-stripes.png"
           alt="Global warming stripes"
           fill
           className="object-cover"
