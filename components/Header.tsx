@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon, LayoutDashboard, CloudSun, Wind, Droplets, BarChart2, Menu, X } from "lucide-react";
+import { Sun, Moon, LayoutDashboard, CloudSun, BarChart2, LineChart, Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -13,9 +13,8 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { label: "Dashboard",     href: "/",           icon: LayoutDashboard },
   { label: "Prakiraan",     href: "/prakiraan",  icon: CloudSun        },
-  { label: "Angin",         href: "/angin",      icon: Wind            },
-  { label: "Curah Hujan",   href: "/hujan",      icon: Droplets        },
   { label: "Statistik",     href: "/statistik",  icon: BarChart2       },
+  { label: "Klimatologi",   href: "/klimatologi", icon: LineChart       },
 ];
 
 export default function Header() {
@@ -73,7 +72,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
 
-      {/* ── Baris Atas: Logo + Waktu + Tema ── */}
+      {/* â”€â”€ Baris Atas: Logo + Waktu + Tema â”€â”€ */}
       <div className="container flex h-20 max-w-screen-2xl items-center justify-between">
 
         {/* Logo dan Judul */}
@@ -91,7 +90,7 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Waktu dan Tanggal — hanya desktop */}
+          {/* Waktu dan Tanggal â€” hanya desktop */}
           <div className="text-right hidden sm:block">
             <p className="text-xl font-semibold font-mono text-gray-800 dark:text-gray-100">
               {formattedTime}
@@ -113,7 +112,7 @@ export default function Header() {
             <span className="sr-only">Ganti Tema</span>
           </Button>
 
-          {/* Tombol Hamburger — hanya mobile */}
+          {/* Tombol Hamburger â€” hanya mobile */}
           <Button
             variant="ghost"
             size="icon"
@@ -126,7 +125,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* ── Baris Bawah: Navbar Desktop ── */}
+      {/* â”€â”€ Baris Bawah: Navbar Desktop â”€â”€ */}
       <nav
         className="hidden sm:block border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
         aria-label="Navigasi utama"
@@ -154,7 +153,7 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* ── Dropdown Menu Mobile ── */}
+      {/* â”€â”€ Dropdown Menu Mobile â”€â”€ */}
       {mobileMenuOpen && (
         <nav
           className="sm:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
@@ -199,3 +198,4 @@ export default function Header() {
     </header>
   );
 }
+

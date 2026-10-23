@@ -6,10 +6,25 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Twitter, Youtube } from "luci
 
 function NavigationLinks() {
   return (
-    <ul className="space-y-2">
+    <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
       <li>
         <Link href="/" className="text-sm hover:underline underline-offset-4">
-          Beranda
+          Dashboard
+        </Link>
+      </li>
+      <li>
+        <Link href="/prakiraan" className="text-sm hover:underline underline-offset-4">
+          Prakiraan Cuaca
+        </Link>
+      </li>
+      <li>
+        <Link href="/statistik" className="text-sm hover:underline underline-offset-4">
+          Statistik Cuaca
+        </Link>
+      </li>
+      <li>
+        <Link href="/klimatologi" className="text-sm hover:underline underline-offset-4">
+          Klimatologi
         </Link>
       </li>
       <li>
